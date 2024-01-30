@@ -1,38 +1,79 @@
 # UseParagon
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/use_paragon`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+The UseParagon Ruby Gem simplifies the interaction with Paragon's service through RESTful API calls, enabling seamless integration of native features into your Ruby applications. With this gem, product and engineering teams can effortlessly incorporate Paragon's SDK and embedded Integration Platform as a Service (iPaaS) to accelerate the development of native integrations.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add the gem to your application's Gemfile by executing:
 
-```ruby
-gem 'use_paragon'
-```
+    $ bundle add use_paragon
 
-And then execute:
+or manually add it to the Gemfile:
 
-    $ bundle install
+    gem "use_paragon"
 
-Or install it yourself as:
+Then run:
+
+    bundle install
+
+If Bundler is not used to manage dependencies, install the gem with:
 
     $ gem install use_paragon
 
 ## Usage
 
-TODO: Write usage instructions here
+To use UseParagon, add your project's ID along with your private key to your Rails credentials.
 
-## Development
+The private key is generated on the UseParagon Dashboard. Follow [these instructions](https://docs.useparagon.com/getting-started/installing-the-connect-sdk#setup-with-your-own-authentication-backend).
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+    Rails.application.credentials.paragon.private_key
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Find your project ID in the Overview tab of any Integration.
+
+    Rails.application.credentials.paragon.project_id
+
+Once this information is configured in your Rails project, you can start using the gem as needed.
+
+### Workflow triggers
+#### Request trigger
+
+The Request trigger can be used to run workflows by sending it an HTTP request. To trigger a workflow request, use the following code:
+
+    UseParagon::Workflow.new(user_id).request("workflow_id", {})
+
+Here, the first parameter is the endpoint of the workflow trigger, and the second one is the payload the workflow expects.
+
+#### Event trigger
+
+App Events are custom events that are sent programmatically from your application via the Paragon SDK or API to trigger Workflows. To trigger a workflow event, use the following code:
+
+    UseParagon::Workflow.new(user_id).event("Create Contact", {})
+
+Here, the first parameter is the App event, and the second one is the payload the workflow expects.
+
+### User API
+
+Retrieve the currently authenticated user and their connected integration state.
+
+    UseParagon::User.new(user_id).get
+
+### Integration API
+
+Get the name, brandColor, and icon, for any of your active integration providers.
+
+    UseParagon::Integration.new(user_id).metadata
+
+Returns a list of the integrations enabled for the Paragon project by the ID in the URL.
+
+    UseParagon::Integration.new(user_id).list
+
+Integrations can be disconnected using paragon.uninstallIntegration or with the REST API with:
+
+    UseParagon::Integration.new(user_id).uninstall(integration_id)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/use_paragon. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/use_paragon/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/candanedo/use_paragon. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/candanedo/use_paragon/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -40,4 +81,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the UseParagon project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/use_paragon/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the UseParagon project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/candanedo/use_paragon/blob/main/CODE_OF_CONDUCT.md).
