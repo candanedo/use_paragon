@@ -2,6 +2,7 @@
 
 require "jwt"
 require "faraday"
+require "use_paragon/configuration"
 
 module UseParagon
   # Basic logic for interacting with UseParagon platform
@@ -62,15 +63,11 @@ module UseParagon
     end
 
     def private_key
-      return nil unless defined?(Rails)
-
-      Rails.application.credentials.paragon.private_key
+      UseParagon.configuration.private_key
     end
 
     def project_id
-      return nil unless defined?(Rails)
-
-      Rails.application.credentials.paragon.project_id
+      UseParagon.configuration.project_id
     end
 
     def validate_user_id!
