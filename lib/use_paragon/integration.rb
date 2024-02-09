@@ -9,21 +9,21 @@ module UseParagon
     def metadata
       endpoint = path("sdk/metadata")
 
-      connection.get(endpoint).body
+      connection.get(endpoint)
     end
 
     # Returns a list of the integrations enabled for the Paragon project by the ID in the URL.
     def list
       endpoint = path("sdk/integrations")
 
-      connection.get(endpoint).body
+      connection.get(endpoint)
     end
 
     # Integrations can be disconnected using uninstall via REST API.
     def uninstall(integration_id)
-      endpoint = path("/sdk/integrations/#{integration_id}")
+      endpoint = path("sdk/integrations/#{integration_id}")
 
-      connection.delete(endpoint).body
+      connection.delete(endpoint)
     end
   end
 end

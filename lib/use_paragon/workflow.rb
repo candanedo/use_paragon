@@ -9,7 +9,7 @@ module UseParagon
     def request(workflow_id, payload = {})
       endpoint = path("sdk/triggers/#{workflow_id}")
 
-      connection.post(endpoint, payload).body
+      connection.post(endpoint, payload)
     end
 
     # Call request to send an API request to a third-party integration on behalf of
@@ -21,21 +21,21 @@ module UseParagon
     def proxy_request(integration_type, third_party_path, options)
       endpoint = path("sdk/proxy/#{integration_type}/#{third_party_path}")
 
-      connection.post(endpoint, options).body
+      connection.post(endpoint, options)
     end
 
     # App Events can be sent from your application using the Paragon REST API.
     def event(event_name, payload = {})
       endpoint = path("sdk/events/trigger")
 
-      connection.post(endpoint, event_payload(event_name, payload)).body
+      connection.post(endpoint, event_payload(event_name, payload))
     end
 
     # Call disable Workflow to turn off a workflow for a user by ID.
     def disable(workflow_id)
       endpoint = path("sdk/workflows/#{workflow_id}")
 
-      connection.delete(endpoint).body
+      connection.delete(endpoint)
     end
 
     private

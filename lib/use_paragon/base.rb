@@ -2,6 +2,7 @@
 
 require "jwt"
 require "faraday"
+require "use_paragon/configuration"
 
 module UseParagon
   # Basic logic for interacting with UseParagon platform
@@ -16,7 +17,7 @@ module UseParagon
     def generate_token
       validate_user_id!
 
-      rsa_private = OpenSSL::PKey::RSA.new(private_key)
+      rsa_private = OpenSSL::PKey::RSA.new(config.private_key)
       created_at = Time.now.floor.to_i
 
       payload = {
@@ -30,16 +31,12 @@ module UseParagon
 
     private
 
-    def base_url
-      "https://zeus.useparagon.com"
-    end
-
     def connection
       @connection ||= Faraday.new do |conn|
         conn.request :authorization, "Bearer", generate_token
         conn.response :logger, Rails.logger, { errors: true, bodies: true }
 
-        conn.url_prefix = base_url
+        conn.url_prefix = config.base_url
         conn.request :json
         conn.response :json, content_type: "application/json"
         conn.response :raise_error
@@ -58,23 +55,15 @@ module UseParagon
     end
 
     def path(endpoint)
-      "/projects/#{project_id}/#{endpoint}"
-    end
-
-    def private_key
-      return nil unless defined?(Rails)
-
-      Rails.application.credentials.paragon.private_key
-    end
-
-    def project_id
-      return nil unless defined?(Rails)
-
-      Rails.application.credentials.paragon.project_id
+      "/projects/#{config.project_id}/#{endpoint}"
     end
 
     def validate_user_id!
       raise UseParagon::InvalidUserIdError if user_id.nil? || user_id.to_s.empty?
+    end
+
+    def config
+      UseParagon.configuration
     end
   end
 end

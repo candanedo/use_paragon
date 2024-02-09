@@ -9,7 +9,7 @@ module UseParagon
     def get
       endpoint = path("sdk/me")
 
-      connection.get(endpoint).body
+      connection.get(endpoint)
     end
 
     # Call set_metadata to associate the authenticated user with metadata from
@@ -18,13 +18,13 @@ module UseParagon
     def metadata=(metadata)
       endpoint = path("sdk/me")
 
-      connection.patch(endpoint, metadata).body
+      connection.patch(endpoint, metadata)
     end
 
     def credentials
       endpoint = path("sdk/credentials")
 
-      connection.get(endpoint).body
+      connection.get(endpoint)
     end
   end
 end

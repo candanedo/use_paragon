@@ -20,6 +20,26 @@ If Bundler is not used to manage dependencies, install the gem with:
 
     $ gem install use_paragon
 
+## Configuration
+
+To use the UseParagon gem, you need to configure it with your private key and project ID. Here's how to do it:
+
+#### For Rails
+Create a new initializer in your Rails project:
+
+    touch config/initializers/use_paragon.rb
+
+Provide your private key and project ID in the initializer:
+
+```ruby
+# config/initializers/use_paragon.rb
+
+UseParagon.configure do |config|
+  config.private_key = Rails.application.credentials.paragon.private_key
+  config.project_id = Rails.application.credentials.paragon.project_id
+end
+```
+
 ## Usage
 
 To use UseParagon, add your project's ID along with your private key to your Rails credentials.
