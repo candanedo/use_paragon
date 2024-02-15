@@ -2,6 +2,7 @@
 
 require "use_paragon/configuration"
 require "use_paragon/base"
+require "use_paragon/engine"
 require "use_paragon/integration"
 require "use_paragon/user"
 require "use_paragon/version"

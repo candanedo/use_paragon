@@ -6,6 +6,8 @@ require "use_paragon/configuration"
 
 module UseParagon
   # Basic logic for interacting with UseParagon platform
+  # Handles authentication and requests to Paragon API base on:
+  # https://docs.useparagon.com/getting-started/installing-the-connect-sdk#setup-with-your-own-authentication-backend
   class Base
     attr_reader :token, :user_id
 
@@ -15,6 +17,7 @@ module UseParagon
     end
 
     def generate_token
+      # Paragon User Token for each of your authenticated user
       validate_user_id!
 
       rsa_private = OpenSSL::PKey::RSA.new(config.private_key)
@@ -33,25 +36,17 @@ module UseParagon
 
     def connection
       @connection ||= Faraday.new do |conn|
-        conn.request :authorization, "Bearer", generate_token
-        conn.response :logger, Rails.logger, { errors: true, bodies: true }
-
         conn.url_prefix = config.base_url
+        conn.request :authorization, "Bearer", generate_token
         conn.request :json
+
+        if config.logger_enabled
+          conn.response :logger, Rails.logger, { errors: true, bodies: true }
+        end
+
         conn.response :json, content_type: "application/json"
         conn.response :raise_error
       end
-    end
-
-    def logger(conn)
-      conn.response :logger, Rails.logger, { errors: true, bodies: true } do |logger|
-        logger.filter(/(Authorization:)([^&]+)/, '\1[REMOVED]')
-        logger.filter(/("code":)([^&]+)/, '\1[REMOVED]')
-      end
-    end
-
-    def logger_enabled?
-      ENV.fetch("USEPARAGON_API_LOGGER", "false") == "true"
     end
 
     def path(endpoint)

@@ -3,7 +3,7 @@
 module UseParagon
   # Allows configuration using an initializer
   class Configuration
-    attr_accessor :private_key, :project_id, :base_url
+    attr_accessor :private_key, :project_id, :base_url, :logger_enabled
 
     def initialize
       @base_url = "https://zeus.useparagon.com"
