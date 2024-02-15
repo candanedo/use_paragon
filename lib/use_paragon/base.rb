@@ -40,9 +40,7 @@ module UseParagon
         conn.request :authorization, "Bearer", generate_token
         conn.request :json
 
-        if config.logger_enabled
-          conn.response :logger, Rails.logger, { errors: true, bodies: true }
-        end
+        conn.response :logger, Rails.logger, { errors: true, bodies: true } if config.logger_enabled
 
         conn.response :json, content_type: "application/json"
         conn.response :raise_error
