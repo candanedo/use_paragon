@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require "jwt"
 require "faraday"
-require "use_paragon/configuration"
+require "jwt"
 
 module UseParagon
   # Basic logic for interacting with UseParagon platform
@@ -40,7 +39,9 @@ module UseParagon
         conn.request :authorization, "Bearer", generate_token
         conn.request :json
 
-        conn.response :logger, Rails.logger, { errors: true, bodies: true } if config.logger_enabled
+        if config.logger_enabled
+          conn.response :logger, config.logger, { errors: true, bodies: true }
+        end
 
         conn.response :json, content_type: "application/json"
         conn.response :raise_error
