@@ -54,6 +54,24 @@ Find your project ID in the Overview tab of any Integration.
 
 Once this information is configured in your Rails project, you can start using the gem as needed.
 
+## Javascript assets (Paragon SDK)
+
+The UseParagon gem includes the JavaScript assets necessary for you to utilize the Paragon SDK. To use window.paragon.authenticate(project, token) or window.connect(integration_name, options) in your JavaScript, you need to require the assets.
+
+#### Using Importmaps
+If you're using importmaps, add the following line to your config/importmap.rb file:
+
+```ruby
+pin "useparagon/connect" # 3.1.2
+```
+This will ensure that the necessary JavaScript asset is included in your application.
+
+If you're using Stimulus controllers, you can require the asset in your desired controllers:
+
+```js
+import "useparagon/connect"
+```
+
 ### Workflow triggers
 #### Request trigger
 
