@@ -11,3 +11,8 @@ Style/StringLiteralsInInterpolation:
 
 Layout/LineLength:
   Max: 100
+
+Metrics/BlockLength:
+  Enabled: true
+  Exclude:
+    - 'spec/**/*_spec.rb' # Exclude block length check for spec files
