@@ -15,4 +15,4 @@ Layout/LineLength:
 Metrics/BlockLength:
   Enabled: true
   Exclude:
-    - 'spec/**/*_spec.rb' # Exclude block length check for spec files
+    - 'spec/**/*_spec.rb'
