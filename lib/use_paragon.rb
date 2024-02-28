@@ -9,12 +9,11 @@ require "use_paragon/workflow"
 
 # UseParagon gem base module
 module UseParagon
+  class Error < StandardError; end
+  class InvalidUserIdError < StandardError; end
+
   # Configuration from initializer
   class << self
-    def load!
-      register_rails_engine if rails?
-    end
-
     def configuration
       @configuration ||= Configuration.new
     end
@@ -22,12 +21,5 @@ module UseParagon
     def configure
       yield(configuration)
     end
-
-    def register_rails_engine
-      require "use_paragon/engine"
-    end
   end
-
-  class Error < StandardError; end
-  class InvalidUserIdError < StandardError; end
 end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "logger"
-
 RSpec.describe UseParagon::Configuration do
   let(:configuration) { described_class.new }
 

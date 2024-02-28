@@ -1,6 +1,22 @@
 # UseParagon
 
-The UseParagon Ruby Gem simplifies the interaction with Paragon's service through RESTful API calls, enabling seamless integration of native features into your Ruby applications. With this gem, product and engineering teams can effortlessly incorporate Paragon's SDK and embedded Integration Platform as a Service (iPaaS) to accelerate the development of native integrations.
+[![example workflow](https://github.com/candanedo/use_paragon/actions/workflows/main.yml/badge.svg)](https://github.com/candanedo/use_paragon/actions?query=branch%3Amain)
+[![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
+
+The UseParagon Ruby Gem simplifies the interaction with Paragon's service through RESTful API calls, enabling seamless integration of native features into your Ruby applications. With this gem, engineering teams can effortlessly incorporate Paragon's API to accelerate the development of native integrations.
+
+| API Method                     | REST Method | Supported |     Gem's Class         |                                   Method                                        |
+|--------------------------------|-------------|-----------|-------------------------|---------------------------------------------------------------------------------|
+| Disable Workflow               |    DELETE   |    [x]    | UseParagon::Workflow    | disable(workflow_id)                                                            |
+| Get Integrations Metadata      |    GET      |    [x]    | UseParagon::Integration | metadata                                                                        |
+| Get User                       |    GET      |    [x]    | UseParagon::User        | get                                                                             |
+| Workflow Event (App Events)    |    POST     |    [x]    | UseParagon::Workflow    | event(event_name, payload = {})                                                 |
+| Proxy Request                  |             |    [x]    | UseParagon::Workflow    | proxy_request(request_method, integration_type, integration_path, payload = {}) |
+| Set User Metadata              |    PATCH    |    [x]    | UseParagon::User        | metadata=(metadata)                                                             |
+| Uninstall Integration          |    DELETE   |    [x]    | UseParagon::Integration | uninstall(integration_id)                                                       |
+| Workflow Request (Trigger)     |    POST     |    [x]    | UseParagon::Workflow    | request(workflow_id, payload = {})                                              |
+| Get Project's Integrations     |    GET      |    [x]    | UseParagon::Integration | list                                                                            |
+| Get User's Connect Credentials |    GET      |    [x]    | UseParagon::User        | credentials                                                                     |
 
 ## Installation
 
@@ -22,54 +38,15 @@ If Bundler is not used to manage dependencies, install the gem with:
 
 ## Configuration
 
-To use the UseParagon gem, you need to configure it with your private key and project ID. Here's how to do it:
+To use the UseParagon gem, you need to configure it with your private key and project ID. Here's an example on how to do it:
 
-#### For Rails
-Create a new initializer in your Rails project:
-
-    touch config/initializers/use_paragon.rb
-
-Provide your private key and project ID in the initializer:
+Provide your private key and project ID:
 
 ```ruby
-# config/initializers/use_paragon.rb
-
 UseParagon.configure do |config|
-  config.private_key = Rails.application.credentials.paragon.private_key
-  config.project_id = Rails.application.credentials.paragon.project_id
+  config.private_key = YOUR_PRIVATE_KEY
+  config.project_id = YOUR_PROJECT_ID
 end
-```
-
-## Usage
-
-To use UseParagon, add your project's ID along with your private key to your Rails credentials.
-
-The private key is generated on the UseParagon Dashboard. Follow [these instructions](https://docs.useparagon.com/getting-started/installing-the-connect-sdk#setup-with-your-own-authentication-backend).
-
-    Rails.application.credentials.paragon.private_key
-
-Find your project ID in the Overview tab of any Integration.
-
-    Rails.application.credentials.paragon.project_id
-
-Once this information is configured in your Rails project, you can start using the gem as needed.
-
-## Javascript assets (Paragon SDK)
-
-The UseParagon gem includes the JavaScript assets necessary for you to utilize the Paragon SDK. To use window.paragon.authenticate(project, token) or window.connect(integration_name, options) in your JavaScript, you need to require the assets.
-
-#### Using Importmaps
-If you're using importmaps, add the following line to your config/importmap.rb file:
-
-```ruby
-pin "useparagon/connect" # 3.1.2
-```
-This will ensure that the necessary JavaScript asset is included in your application.
-
-If you're using Stimulus controllers, you can require the asset in your desired controllers:
-
-```js
-import "useparagon/connect"
 ```
 
 ### Workflow triggers
