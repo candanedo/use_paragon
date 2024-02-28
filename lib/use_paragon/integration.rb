@@ -7,22 +7,14 @@ module UseParagon
   class Integration < Base
     VALID_HTTP_METHODS = %w[post get put patch delete].freeze
 
-    # Returns a list of the integrations enabled for the Paragon project by the ID in the URL.
     def list
       connection.get(path("sdk/integrations"))
     end
 
-    # Get the name, brandColor, and icon, for any of your active integration providers.
     def metadata
       connection.get(path("sdk/metadata"))
     end
 
-    # Call proxy_request to send an API request to a third-party integration on behalf of
-    # one of your users
-    # https://docs.useparagon.com/api/making-api-requests#server-side-usage
-    # This endpoint accepts any HTTP verb you want to use with the API:
-    # post, get, put, patch or delete.
-    # Body contents must be specified as application/json.
     def proxy_request(request_method, integration_type, integration_path, payload = {})
       formatted_method = request_method&.downcase
 
@@ -35,7 +27,6 @@ module UseParagon
       )
     end
 
-    # Integrations can be disconnected using uninstall via REST API.
     def uninstall(integration_id)
       connection.delete(path("sdk/integrations/#{integration_id}"))
     end

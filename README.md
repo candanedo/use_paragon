@@ -5,18 +5,19 @@
 
 The UseParagon Ruby Gem simplifies the interaction with Paragon's service through RESTful API calls, enabling seamless integration of native features into your Ruby applications. With this gem, engineering teams can effortlessly incorporate Paragon's API to accelerate the development of native integrations.
 
-| API Method                     | REST Method | Supported |     Gem's Class         |                                   Method                                        |
-|--------------------------------|-------------|-----------|-------------------------|---------------------------------------------------------------------------------|
-| Disable Workflow               |    DELETE   |    [x]    | UseParagon::Workflow    | disable(workflow_id)                                                            |
-| Get Integrations Metadata      |    GET      |    [x]    | UseParagon::Integration | metadata                                                                        |
-| Get User                       |    GET      |    [x]    | UseParagon::User        | get                                                                             |
-| Workflow Event (App Events)    |    POST     |    [x]    | UseParagon::Workflow    | event(event_name, payload = {})                                                 |
-| Proxy Request                  |             |    [x]    | UseParagon::Workflow    | proxy_request(request_method, integration_type, integration_path, payload = {}) |
-| Set User Metadata              |    PATCH    |    [x]    | UseParagon::User        | metadata=(metadata)                                                             |
-| Uninstall Integration          |    DELETE   |    [x]    | UseParagon::Integration | uninstall(integration_id)                                                       |
-| Workflow Request (Trigger)     |    POST     |    [x]    | UseParagon::Workflow    | request(workflow_id, payload = {})                                              |
-| Get Project's Integrations     |    GET      |    [x]    | UseParagon::Integration | list                                                                            |
-| Get User's Connect Credentials |    GET      |    [x]    | UseParagon::User        | credentials                                                                     |
+| API Method                     | HTTP Method | Supported |
+|--------------------------------|-------------|-----------|
+| Disable Workflow               |    DELETE   |    ✅     |
+| Get Integrations Metadata      |    GET      |    ✅     |
+| Get User                       |    GET      |    ✅     |
+| Workflow Event (App Events)    |    POST     |    ✅     |
+| Proxy Request                  |    -        |    ✅     |
+| Set User Metadata              |    PATCH    |    ✅     |
+| Uninstall Integration          |    DELETE   |    ✅     |
+| Workflow Request (Trigger)     |    POST     |    ✅     |
+| Get Project's Integrations     |    GET      |    ✅     |
+| Get User's Connect Credentials |    GET      |    ✅     |
+| Task History API               |    -        |    ❌     |
 
 ## Installation
 
@@ -46,45 +47,86 @@ Provide your private key and project ID:
 UseParagon.configure do |config|
   config.private_key = YOUR_PRIVATE_KEY
   config.project_id = YOUR_PROJECT_ID
+  # Additional configurations available and defaults.
+  # config.base_url = "https://zeus.useparagon.com"
+  # config.logger = Logger.new(STDOUT)
+  # config.logger_enabled = true
 end
 ```
 
-### Workflow triggers
-#### Request trigger
+## How to use
+### Disable Workflow
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#disableworkflow-workflowid-string-greater-than-promise)
 
-The Request trigger can be used to run workflows by sending it an HTTP request. To trigger a workflow request, use the following code:
+Call disable Workflow to turn off a workflow for a user by ID.
 
-    UseParagon::Workflow.new(user_id).request("workflow_id", {})
+    UseParagon::Workflow.new(user_id).disable("workflow_id")
 
-Here, the first parameter is the endpoint of the workflow trigger, and the second one is the payload the workflow expects.
-
-#### Event trigger
-
-App Events are custom events that are sent programmatically from your application via the Paragon SDK or API to trigger Workflows. To trigger a workflow event, use the following code:
-
-    UseParagon::Workflow.new(user_id).event("Create Contact", {})
-
-Here, the first parameter is the App event, and the second one is the payload the workflow expects.
-
-### User API
-
-Retrieve the currently authenticated user and their connected integration state.
-
-    UseParagon::User.new(user_id).get
-
-### Integration API
+### Get Integrations Metadata
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#getintegrationmetadata)
 
 Get the name, brandColor, and icon, for any of your active integration providers.
 
     UseParagon::Integration.new(user_id).metadata
 
-Returns a list of the integrations enabled for the Paragon project by the ID in the URL.
+### Get User
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#getuser-paragonuser)
+
+Retrieve the currently authenticated user and their connected integration state.
+
+    UseParagon::User.new(user_id).get
+
+### Workflow Event (App Events)
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#event-name-string-json-json)
+
+App Events can be sent from your application using the Paragon REST API.
+
+    UseParagon::Workflow.new(user_id).event(event_name, payload = {})
+
+### Proxy Request 
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#request-integrationtype-string-path-string-requestoptions-requestinit-promise-less-than-unknown-gre)
+
+Call proxy_request to send an API request to a third-party integration on behalf of one of your users
+
+This endpoint accepts any HTTP verb you want to use with the API:
+post, get, put, patch or delete.
+
+    UseParagon::Integration.new(user_id).proxy_request(request_method, integration_type, integration_path, payload = {})
+
+### Set User Metadata
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#setusermetadata-meta-object)
+
+Associate the authenticated user with metadata from your application. This metadata can be accessed with "Get User"
+
+    UseParagon::User.new(user_id).metadata=({email: "example@example.com"})
+
+### Uninstall Integration
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#workflow)
+
+Disconnect an integration for the authenticated user
+
+    UseParagon::Integration.new(user_id).uninstall(integration_id)
+
+### Workflow Request (Trigger)
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#workflow-1)
+
+Trigger a Paragon workflow that sends a custom response back to your app. Note: The workflow must be enabled and use a Request-type trigger.
+
+    UseParagon::Workflow.new(user_id).request(workflow_id, payload = {})
+
+### Get Project's Integrations
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#get-projects-integrations)
+
+Returns a list of the integrations enabled for the Paragon project by the ID in the URL. 
 
     UseParagon::Integration.new(user_id).list
 
-Integrations can be disconnected using paragon.uninstallIntegration or with the REST API with:
+### Get User's Connect Credentials
+[Paragon Documentation](https://docs.useparagon.com/api/api-reference#get-users-connect-credentials)
 
-    UseParagon::Integration.new(user_id).uninstall(integration_id)
+Returns a list of the user's Connect credentials (i.e., the accounts connected and authorized by the end user).
+
+    UseParagon::User.new(user_id).credentials
 
 ## Contributing
 

@@ -10,9 +10,6 @@ module UseParagon
       connection.get(path("sdk/me"))
     end
 
-    # Call set_metadata to associate the authenticated user with metadata from
-    # your application
-    # { "meta": { "Email": "sean@useparagon.com", "apiKey": "key_Y0kBVldPFInxK" } }
     def metadata=(metadata)
       connection.patch(path("sdk/me"), metadata)
     end
