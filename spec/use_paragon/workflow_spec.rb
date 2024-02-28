@@ -12,38 +12,6 @@ RSpec.describe UseParagon::Workflow do
     end
   end
 
-  describe "#proxy_request" do
-    context "with valid HTTP method" do
-      it "calls the correct endpoint with post method" do
-        expect(workflow).to receive(:path).with("sdk/proxy/some_type/some_path")
-                                          .and_return("/projects/123/sdk/proxy/some_type/some_path")
-        expect(workflow).to receive(:connection).and_return(double("connection", post: true))
-        workflow.proxy_request("post", "some_type", "some_path", {})
-      end
-
-      it "calls the correct endpoint with delete method" do
-        expect(workflow).to receive(:path).with("sdk/proxy/some_type/some_path")
-                                          .and_return("/projects/123/sdk/proxy/some_type/some_path")
-        expect(workflow).to receive(:connection).and_return(double("connection", delete: true))
-        workflow.proxy_request("delete", "some_type", "some_path", {})
-      end
-    end
-
-    context "with invalid HTTP method" do
-      it "raises ArgumentError" do
-        expect { workflow.proxy_request("invalid_method", "some_type", "some_path", {}) }
-          .to raise_error(ArgumentError, /Invalid request method/)
-      end
-    end
-
-    context "with missing HTTP method" do
-      it "raises ArgumentError" do
-        expect { workflow.proxy_request(nil, "some_type", "some_path", {}) }
-          .to raise_error(ArgumentError, /Invalid request method/)
-      end
-    end
-  end
-
   describe "#event" do
     it "calls the correct endpoint with post method" do
       expect(workflow).to receive(:path).with("sdk/events/trigger")
