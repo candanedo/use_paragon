@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Eduardo Candanedo"]
   spec.email         = ["eduardo@candanedo.dev"]
 
-  spec.summary       = "Ship every native integration your customers need from your Rails
-    application."
+  spec.summary       = "Ship every native integration your customers need."
   spec.description   = "Product & engineering teams use Paragon's SDK & embedded
     iPaaS to ship native integrations 7x faster than building in-house. This Gem
     will allow you to seamlessly connect to the Paragon platform via API"
