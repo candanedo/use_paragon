@@ -11,20 +11,12 @@ require "use_paragon/workflow"
 module UseParagon
   # Configuration from initializer
   class << self
-    def load!
-      register_rails_engine if rails?
-    end
-
     def configuration
       @configuration ||= Configuration.new
     end
 
     def configure
       yield(configuration)
-    end
-
-    def register_rails_engine
-      require "use_paragon/engine"
     end
   end
 
