@@ -5,7 +5,7 @@ require "use_paragon/base"
 module UseParagon
   # API calls for workflows
   class Workflow < Base
-    def request(workflow_id, payload: {}, headers: {})
+    def request(workflow_id, payload, headers: {})
       # connection.headers = connection.headers.merge(headers)
       set_headers(headers)
       connection.post(path("sdk/triggers/#{workflow_id}"), payload)
