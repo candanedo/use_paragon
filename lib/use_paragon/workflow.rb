@@ -11,7 +11,8 @@ module UseParagon
       connection.post(path("sdk/triggers/#{workflow_id}"), payload)
     end
 
-    def event(event_name, payload = {})
+    def event(event_name, payload = {}, headers: {})
+      set_headers(headers)
       connection.post(path("sdk/events/trigger"), event_payload(event_name, payload))
     end
 
