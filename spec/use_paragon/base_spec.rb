@@ -45,6 +45,16 @@ RSpec.describe UseParagon::Base do
       expect(connection.builder.handlers).to include(Faraday::Request::Authorization)
       expect(connection.builder.handlers).to include(Faraday::Response::Logger)
     end
+
+    it "uses custom base_url for on-prem installations" do
+      custom_url = "https://paragon.mycompany.com"
+      UseParagon.configure do |config|
+        config.base_url = custom_url
+      end
+
+      connection = base_instance.send(:connection)
+      expect(connection.url_prefix.to_s).to eq("#{custom_url}/")
+    end
   end
 
   describe "#path" do

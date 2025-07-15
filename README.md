@@ -48,9 +48,21 @@ UseParagon.configure do |config|
   config.private_key = YOUR_PRIVATE_KEY
   config.project_id = YOUR_PROJECT_ID
   # Additional configurations available and defaults.
-  # config.base_url = "https://zeus.useparagon.com"
+  # config.base_url = "https://zeus.useparagon.com"  # Change this for on-prem installations
   # config.logger = Logger.new(STDOUT)
   # config.logger_enabled = true
+end
+```
+
+### On-Premise Installations
+
+For on-premise Paragon installations, you can configure a custom base URL:
+
+```ruby
+UseParagon.configure do |config|
+  config.private_key = YOUR_PRIVATE_KEY
+  config.project_id = YOUR_PROJECT_ID
+  config.base_url = "https://paragon.yourcompany.com"  # Your on-prem Paragon instance
 end
 ```
 
@@ -83,6 +95,10 @@ App Events can be sent from your application using the Paragon REST API.
 
     UseParagon::Workflow.new(user_id).event(event_name, payload = {})
 
+You can also pass custom headers:
+
+    UseParagon::Workflow.new(user_id).event(event_name, payload = {}, headers: { "X-Custom-Header" => "value" })
+
 ### Proxy Request 
 [Paragon Documentation](https://docs.useparagon.com/api/api-reference#request-integrationtype-string-path-string-requestoptions-requestinit-promise-less-than-unknown-gre)
 
@@ -113,6 +129,10 @@ Disconnect an integration for the authenticated user
 Trigger a Paragon workflow that sends a custom response back to your app. Note: The workflow must be enabled and use a Request-type trigger.
 
     UseParagon::Workflow.new(user_id).request(workflow_id, payload = {})
+
+You can also pass custom headers:
+
+    UseParagon::Workflow.new(user_id).request(workflow_id, payload = {}, headers: { "X-Custom-Header" => "value" })
 
 ### Get Project's Integrations
 [Paragon Documentation](https://docs.useparagon.com/api/api-reference#get-projects-integrations)

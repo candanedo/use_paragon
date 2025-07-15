@@ -41,6 +41,13 @@ RSpec.describe UseParagon::Configuration do
       expect(configuration.base_url).to eq("http://example.com")
     end
 
+    it "allows overriding base_url for on-prem installations" do
+      on_prem_url = "https://paragon.mycompany.com"
+      configuration.base_url = on_prem_url
+      expect(configuration.base_url).to eq(on_prem_url)
+      expect(configuration.base_url).not_to eq("https://zeus.useparagon.com")
+    end
+
     it "allows setting and getting logger" do
       default_logger = configuration.logger
       configured_logger = Logger.new(STDOUT)
