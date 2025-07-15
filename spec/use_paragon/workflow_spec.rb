@@ -12,7 +12,7 @@ RSpec.describe UseParagon::Workflow do
       allow(connection).to receive(:headers=)
       allow(connection).to receive(:post).and_return(true)
       expect(workflow).to receive(:connection).and_return(connection).exactly(3).times
-      workflow.request(789, {}, headers: {test: 'value'})
+      workflow.request(789, {}, headers: { test: "value" })
     end
   end
 

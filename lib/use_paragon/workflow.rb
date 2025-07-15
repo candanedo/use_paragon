@@ -7,12 +7,12 @@ module UseParagon
   class Workflow < Base
     def request(workflow_id, payload, headers: {})
       # connection.headers = connection.headers.merge(headers)
-      set_headers(headers)
+      self.headers = headers
       connection.post(path("sdk/triggers/#{workflow_id}"), payload)
     end
 
     def event(event_name, payload = {}, headers: {})
-      set_headers(headers)
+      self.headers = headers
       connection.post(path("sdk/events/trigger"), event_payload(event_name, payload))
     end
 
@@ -29,7 +29,7 @@ module UseParagon
       }
     end
 
-    def set_headers(headers)
+    def headers=(headers)
       connection.headers = connection.headers.merge(headers)
     end
   end
